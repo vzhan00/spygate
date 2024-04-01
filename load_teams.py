@@ -12,13 +12,15 @@ def add_teams_to_mongo(teams):
         team_games_database[team['team']].drop()
         teams_database[team['team']].drop()
 
+        team_games_database[team['team']].create_index('datePlayed')
         teams_col = teams_database[team['team']]
+        teams_col.create_index('datePlayed')
         for player in team['players']:
             puuid = get_player_puuid(player)
             player_doc = {
                 '_id': puuid,
                 'player': player,
-                'compChampions': []
+                'games': []
             }
 
             teams_col.insert_one(player_doc)
